@@ -1,0 +1,20 @@
+# Mini SQL Compiler - Python Requirements
+# 
+# This project has NO external dependencies!
+# Everything works with Python's standard library.
+#
+# Required Python Version: 3.8 or higher
+#
+# Included modules (part of Python standard library):
+# - tkinter (for GUI)
+# - re (for regex in lexer)
+# - typing (for type hints)
+# - enum (for token types)
+# - datetime (for timestamps)
+#
+# Installation Instructions:
+# 1. Install Python 3.8+ from python.org
+# 2. Ensure "Add Python to PATH" is checked during installation
+# 3. Run: python gui.py
+#
+# No pip install required!

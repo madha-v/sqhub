@@ -1,0 +1,890 @@
+# Mini SQL Compiler - Complete User Guide
+
+## Table of Contents
+1. Introduction
+2. Installation Instructions
+3. Getting Started
+4. SQL Command Reference
+5. GUI Tutorial
+6. Examples and Use Cases
+7. Troubleshooting
+8. Technical Architecture
+
+---
+
+## 1. Introduction
+
+### What is Mini SQL Compiler?
+The Mini SQL Compiler is a complete implementation of a SQL query compiler that demonstrates all phases of compilation:
+- **Lexical Analysis**: Breaking down SQL queries into tokens
+- **Syntax Analysis**: Validating query structure and building Abstract Syntax Trees
+- **Execution**: Running queries on an in-memory database
+
+### Project Purpose
+This project was created for the Compiler Design course (6th Semester) to demonstrate:
+- How compilers work at each phase
+- Token recognition and parsing
+- Abstract Syntax Tree construction
+- Query execution and optimization
+
+### Features at a Glance
+✅ Full SQL support (CREATE, INSERT, SELECT, UPDATE, DELETE, DROP)
+✅ WHERE clauses with multiple conditions
+✅ Beautiful graphical user interface
+✅ Real-time query execution
+✅ Syntax error reporting
+✅ Professional result display in tables
+
+---
+
+## 2. Installation Instructions
+
+### Prerequisites
+- **Operating System**: Windows 10/11
+- **Python Version**: 3.8 or higher
+- **Required Packages**: tkinter (included with Python)
+
+### Step-by-Step Installation
+
+#### Step 1: Install Python
+1. Go to https://www.python.org/downloads/
+2. Download Python 3.x for Windows
+3. Run the installer
+4. ⚠️ **IMPORTANT**: Check "Add Python to PATH"
+5. Click "Install Now"
+6. Wait for installation to complete
+
+#### Step 2: Verify Installation
+1. Open Command Prompt (Press Win + R, type 'cmd', press Enter)
+2. Type: `python --version`
+3. You should see: `Python 3.x.x`
+4. If you see an error, Python is not in PATH (see Troubleshooting)
+
+#### Step 3: Extract Project Files
+1. Extract the mini-sql-compiler.zip file
+2. You should have these files:
+   ```
+   📁 mini-sql-compiler/
+   ├── 📄 gui.py
+   ├── 📄 sql_compiler.py
+   ├── 📄 README.md
+   ├── 📄 USER_GUIDE.txt
+   └── 📄 RUN_COMPILER.bat
+   ```
+
+#### Step 4: Launch the Compiler
+**Method 1 (Easiest)**:
+- Double-click `RUN_COMPILER.bat`
+
+**Method 2**:
+1. Open Command Prompt
+2. Navigate to folder: `cd path\to\mini-sql-compiler`
+3. Run: `python gui.py`
+
+---
+
+## 3. Getting Started
+
+### First Time Launch
+
+When you launch the compiler, you'll see:
+
+```
+┌─────────────────────────────────────────────────────────────┐
+│  ⚡ Mini SQL Compiler                                        │
+│  Compiler Design Project - 6th Semester                     │
+└─────────────────────────────────────────────────────────────┘
+
+┌──────────────────────┬──────────────────────────────────────┐
+│   📝 SQL Query       │   📤 Output Console                  │
+│      Editor          │                                      │
+│                      │                                      │
+│   [Query text area]  │   [Output messages]                  │
+│                      │                                      │
+│   [▶ Execute Query]  │                                      │
+│   [🗑 Clear]         │   📋 Query Results                   │
+│   [📊 Show Tables]   │   [Result table]                     │
+│                      │                                      │
+│   📚 Sample Queries  │                                      │
+│   [Sample list]      │                                      │
+└──────────────────────┴──────────────────────────────────────┘
+```
+
+### Your First Query
+
+Let's create a simple table and add data:
+
+**Step 1**: Click on the first sample query or type:
+```sql
+CREATE TABLE students (id INT, name VARCHAR(50), age INT, grade VARCHAR(2))
+```
+
+**Step 2**: Click "▶ Execute Query"
+
+**Step 3**: You should see in the output:
+```
+✓ SUCCESS
+Table 'students' created successfully
+```
+
+**Step 4**: Now add some data:
+```sql
+INSERT INTO students VALUES (1, 'Alice', 20, 'A')
+```
+
+**Step 5**: Query the data:
+```sql
+SELECT * FROM students
+```
+
+**Step 6**: You'll see the data in the Results Table!
+
+---
+
+## 4. SQL Command Reference
+
+### CREATE TABLE
+
+**Purpose**: Create a new table with specified columns
+
+**Syntax**:
+```sql
+CREATE TABLE table_name (
+    column1 datatype,
+    column2 datatype,
+    ...
+)
+```
+
+**Supported Data Types**:
+- `INT` - Integer numbers (1, 2, 100, -5)
+- `VARCHAR(n)` - Text strings up to n characters
+- `FLOAT` - Decimal numbers (3.14, 99.99)
+- `DATE` - Date values (format: 'YYYY-MM-DD')
+
+**Examples**:
+```sql
+-- Simple table
+CREATE TABLE users (id INT, name VARCHAR(100))
+
+-- Table with multiple types
+CREATE TABLE products (
+    product_id INT,
+    name VARCHAR(200),
+    price FLOAT,
+    launch_date DATE
+)
+
+-- Employee table
+CREATE TABLE employees (
+    emp_id INT,
+    full_name VARCHAR(150),
+    salary FLOAT,
+    department VARCHAR(50)
+)
+```
+
+### INSERT INTO
+
+**Purpose**: Add new records to a table
+
+**Syntax**:
+```sql
+-- Insert with all columns
+INSERT INTO table_name VALUES (value1, value2, ...)
+
+-- Insert with specific columns
+INSERT INTO table_name (column1, column2) VALUES (value1, value2)
+```
+
+**Rules**:
+- String values must be in quotes: 'text'
+- Numbers don't need quotes: 123 or 45.67
+- Values must match column order
+- If specifying columns, only those columns get values
+
+**Examples**:
+```sql
+-- Insert all columns
+INSERT INTO students VALUES (1, 'John Doe', 21, 'A')
+
+-- Insert specific columns
+INSERT INTO students (id, name) VALUES (2, 'Jane Smith')
+
+-- Insert multiple records (run separately)
+INSERT INTO products VALUES (101, 'Laptop', 999.99, '2024-01-15')
+INSERT INTO products VALUES (102, 'Mouse', 29.99, '2024-02-01')
+INSERT INTO products VALUES (103, 'Keyboard', 79.99, '2024-02-10')
+```
+
+### SELECT
+
+**Purpose**: Query and retrieve data from tables
+
+**Syntax**:
+```sql
+-- Select all columns
+SELECT * FROM table_name
+
+-- Select specific columns
+SELECT column1, column2 FROM table_name
+
+-- Select with filter
+SELECT * FROM table_name WHERE condition
+```
+
+**WHERE Operators**:
+- `=` Equal to
+- `!=` Not equal to
+- `<` Less than
+- `>` Greater than
+- `<=` Less than or equal to
+- `>=` Greater than or equal to
+
+**Logical Operators**:
+- `AND` Both conditions must be true
+- `OR` Either condition can be true
+
+**Examples**:
+```sql
+-- Get all records
+SELECT * FROM students
+
+-- Get specific columns
+SELECT name, grade FROM students
+
+-- Filter by one condition
+SELECT * FROM students WHERE age > 20
+
+-- Filter by multiple conditions
+SELECT * FROM students WHERE age > 18 AND grade = 'A'
+
+-- OR condition
+SELECT * FROM students WHERE grade = 'A' OR grade = 'B'
+
+-- Complex condition
+SELECT name, age FROM students WHERE age >= 20 AND (grade = 'A' OR grade = 'B')
+```
+
+### UPDATE
+
+**Purpose**: Modify existing records in a table
+
+**Syntax**:
+```sql
+-- Update one column
+UPDATE table_name SET column = value WHERE condition
+
+-- Update multiple columns
+UPDATE table_name SET column1 = value1, column2 = value2 WHERE condition
+```
+
+**⚠️ WARNING**: If you don't use WHERE, ALL records will be updated!
+
+**Examples**:
+```sql
+-- Update single field
+UPDATE students SET grade = 'A+' WHERE id = 1
+
+-- Update multiple fields
+UPDATE students SET age = 22, grade = 'B' WHERE name = 'John Doe'
+
+-- Update based on condition
+UPDATE products SET price = 899.99 WHERE product_id = 101
+
+-- Update multiple records
+UPDATE students SET grade = 'A' WHERE age > 20
+
+-- Update all records (dangerous!)
+UPDATE students SET grade = 'Pass'
+```
+
+### DELETE
+
+**Purpose**: Remove records from a table
+
+**Syntax**:
+```sql
+-- Delete with condition
+DELETE FROM table_name WHERE condition
+
+-- Delete all records
+DELETE FROM table_name
+```
+
+**⚠️ WARNING**: Be careful with DELETE! Always use WHERE unless you want to delete everything.
+
+**Examples**:
+```sql
+-- Delete specific record
+DELETE FROM students WHERE id = 1
+
+-- Delete based on condition
+DELETE FROM students WHERE age < 18
+
+-- Delete multiple conditions
+DELETE FROM students WHERE age < 18 OR grade = 'F'
+
+-- Delete all records (use with caution!)
+DELETE FROM students
+```
+
+### DROP TABLE
+
+**Purpose**: Delete an entire table (structure + data)
+
+**Syntax**:
+```sql
+DROP TABLE table_name
+```
+
+**⚠️ WARNING**: This permanently deletes the table! Cannot be undone.
+
+**Examples**:
+```sql
+DROP TABLE students
+DROP TABLE products
+DROP TABLE employees
+```
+
+---
+
+## 5. GUI Tutorial
+
+### Understanding the Interface
+
+#### Query Editor (Top Left)
+- Type or paste SQL queries here
+- Supports multi-line queries
+- Copy/paste works normally
+- Use the sample queries to learn
+
+#### Sample Queries (Bottom Left)
+- Pre-written example queries
+- Click any query to load it into editor
+- Great for learning SQL syntax
+- Covers all supported commands
+
+#### Output Console (Top Right)
+- Shows execution results
+- Displays success/error messages
+- Includes timestamp for each query
+- Color-coded (green = success, red = error)
+
+#### Results Table (Bottom Right)
+- Shows data from SELECT queries
+- Professional table format
+- Scrollable for large results
+- Column headers shown
+
+#### Control Buttons
+- **▶ Execute Query**: Run the current query
+- **🗑 Clear**: Clear the editor
+- **📊 Show Tables**: View all database tables
+
+### Step-by-Step Workflow
+
+**Step 1: Write or Load Query**
+- Type directly in editor
+- OR click a sample query
+
+**Step 2: Execute**
+- Click "▶ Execute Query"
+- Or press it using mouse
+
+**Step 3: View Results**
+- Check Output Console for messages
+- If SELECT query, see data in Results Table
+
+**Step 4: Verify**
+- Use SELECT * to verify INSERT/UPDATE
+- Use "Show Tables" to see all tables
+
+---
+
+## 6. Examples and Use Cases
+
+### Example 1: Student Management System
+
+**Objective**: Create a complete student database
+
+```sql
+-- 1. Create the table
+CREATE TABLE students (
+    student_id INT,
+    name VARCHAR(100),
+    age INT,
+    grade VARCHAR(2),
+    gpa FLOAT
+)
+
+-- 2. Add students
+INSERT INTO students VALUES (1, 'Alice Johnson', 20, 'A', 3.9)
+INSERT INTO students VALUES (2, 'Bob Smith', 21, 'B', 3.5)
+INSERT INTO students VALUES (3, 'Charlie Brown', 19, 'A', 3.8)
+INSERT INTO students VALUES (4, 'Diana Prince', 22, 'B', 3.6)
+INSERT INTO students VALUES (5, 'Eve Davis', 20, 'C', 3.0)
+
+-- 3. View all students
+SELECT * FROM students
+
+-- 4. Find honor students (GPA > 3.7)
+SELECT name, gpa FROM students WHERE gpa > 3.7
+
+-- 5. Find young high-achievers
+SELECT * FROM students WHERE age < 21 AND grade = 'A'
+
+-- 6. Update a student's grade
+UPDATE students SET grade = 'A+', gpa = 4.0 WHERE name = 'Alice Johnson'
+
+-- 7. Verify the update
+SELECT * FROM students WHERE name = 'Alice Johnson'
+
+-- 8. Remove failing students (if any)
+DELETE FROM students WHERE grade = 'F'
+
+-- 9. View final roster
+SELECT name, grade, gpa FROM students
+```
+
+### Example 2: Product Inventory
+
+**Objective**: Manage product catalog
+
+```sql
+-- 1. Create products table
+CREATE TABLE products (
+    product_id INT,
+    product_name VARCHAR(200),
+    category VARCHAR(50),
+    price FLOAT,
+    stock INT
+)
+
+-- 2. Add products
+INSERT INTO products VALUES (101, 'Laptop Pro 15', 'Electronics', 1299.99, 50)
+INSERT INTO products VALUES (102, 'Wireless Mouse', 'Electronics', 29.99, 200)
+INSERT INTO products VALUES (103, 'Office Chair', 'Furniture', 199.99, 75)
+INSERT INTO products VALUES (104, 'Desk Lamp', 'Furniture', 49.99, 150)
+INSERT INTO products VALUES (105, 'USB Cable', 'Electronics', 9.99, 500)
+
+-- 3. View all products
+SELECT * FROM products
+
+-- 4. Find electronics
+SELECT product_name, price FROM products WHERE category = 'Electronics'
+
+-- 5. Find expensive items
+SELECT * FROM products WHERE price > 100
+
+-- 6. Low stock alert
+SELECT product_name, stock FROM products WHERE stock < 100
+
+-- 7. Price update (discount on office chair)
+UPDATE products SET price = 179.99 WHERE product_id = 103
+
+-- 8. Stock update after sale
+UPDATE products SET stock = 48 WHERE product_id = 101
+
+-- 9. Remove discontinued product
+DELETE FROM products WHERE product_id = 105
+
+-- 10. View updated inventory
+SELECT product_name, price, stock FROM products
+```
+
+### Example 3: Employee Database
+
+**Objective**: HR management system
+
+```sql
+-- 1. Create employees table
+CREATE TABLE employees (
+    emp_id INT,
+    full_name VARCHAR(150),
+    department VARCHAR(50),
+    salary FLOAT,
+    hire_date DATE
+)
+
+-- 2. Add employees
+INSERT INTO employees VALUES (1001, 'John Doe', 'IT', 75000, '2022-01-15')
+INSERT INTO employees VALUES (1002, 'Jane Smith', 'HR', 65000, '2022-03-20')
+INSERT INTO employees VALUES (1003, 'Bob Johnson', 'IT', 80000, '2021-11-10')
+INSERT INTO employees VALUES (1004, 'Alice Williams', 'Finance', 70000, '2023-02-01')
+INSERT INTO employees VALUES (1005, 'Charlie Davis', 'IT', 72000, '2023-05-15')
+
+-- 3. View all employees
+SELECT * FROM employees
+
+-- 4. Find IT department
+SELECT full_name, salary FROM employees WHERE department = 'IT'
+
+-- 5. Find high earners
+SELECT full_name, department, salary FROM employees WHERE salary > 70000
+
+-- 6. IT department high earners
+SELECT * FROM employees WHERE department = 'IT' AND salary > 75000
+
+-- 7. Give raises to IT department
+UPDATE employees SET salary = 85000 WHERE emp_id = 1003
+UPDATE employees SET salary = 77000 WHERE emp_id = 1005
+
+-- 8. Transfer employee
+UPDATE employees SET department = 'Management' WHERE emp_id = 1002
+
+-- 9. View updated employee list
+SELECT full_name, department, salary FROM employees
+
+-- 10. Department-wise average (manual calculation from results)
+SELECT * FROM employees WHERE department = 'IT'
+```
+
+---
+
+## 7. Troubleshooting
+
+### Common Errors and Solutions
+
+#### Error: "Python is not recognized as an internal or external command"
+
+**Problem**: Python is not in system PATH
+
+**Solution**:
+1. Reinstall Python
+2. During installation, CHECK "Add Python to PATH"
+3. Restart Command Prompt after installation
+
+**Alternative Solution**:
+1. Find Python installation folder (usually C:\Python3x)
+2. Right-click "This PC" → Properties
+3. Advanced System Settings → Environment Variables
+4. Edit "Path" variable
+5. Add Python folder path
+6. Click OK and restart
+
+#### Error: "No module named 'tkinter'"
+
+**Problem**: tkinter not installed
+
+**Solution**:
+- Reinstall Python
+- During installation, ensure "tcl/tk and IDLE" is checked
+- tkinter comes with Python by default
+
+#### Error: "SyntaxError: Unexpected token"
+
+**Problem**: SQL syntax error in your query
+
+**Common Causes**:
+- Misspelled keywords (SELCT instead of SELECT)
+- Missing comma between columns
+- Unmatched quotes in strings
+- Missing VALUES keyword in INSERT
+
+**Solution**:
+- Check spelling of all keywords
+- Ensure proper spacing
+- Match all quotes: 'text' not 'text
+- Compare with sample queries
+
+#### Error: "Table 'xyz' does not exist"
+
+**Problem**: Trying to use a table that wasn't created
+
+**Solution**:
+1. Click "📊 Show Tables" to see available tables
+2. Create the table first with CREATE TABLE
+3. Check table name spelling (case-sensitive!)
+
+#### Error: "Number of columns and values don't match"
+
+**Problem**: INSERT statement has wrong number of values
+
+**Solution**:
+- Count your table columns
+- Ensure you provide exactly that many values
+- Or specify column names: INSERT INTO table (col1, col2) VALUES (val1, val2)
+
+#### GUI doesn't show data after SELECT
+
+**Problem**: Query might have failed silently
+
+**Solution**:
+1. Check Output Console for error messages
+2. Verify table has data: SELECT * FROM table_name
+3. Try simpler query first: SELECT * FROM students
+4. Check WHERE conditions are correct
+
+#### Application closes immediately after double-clicking BAT file
+
+**Problem**: Python error is occurring
+
+**Solution**:
+1. Don't double-click BAT file
+2. Open Command Prompt
+3. Navigate to folder: cd path\to\mini-sql-compiler
+4. Run: python gui.py
+5. Read error message that appears
+6. Common fixes:
+   - Install Python if missing
+   - Check file names (gui.py, sql_compiler.py must exist)
+
+---
+
+## 8. Technical Architecture
+
+### Compiler Phases
+
+#### Phase 1: Lexical Analysis (Scanner)
+
+**File**: sql_compiler.py → Class: Lexer
+
+**Purpose**: Convert SQL query string into tokens
+
+**Process**:
+```
+Input:  "SELECT name FROM students WHERE age > 20"
+
+Scanning:
+- Read character by character
+- Identify token boundaries
+- Recognize keywords, identifiers, operators
+
+Output: [
+    Token(SELECT, "SELECT"),
+    Token(IDENTIFIER, "name"),
+    Token(FROM, "FROM"),
+    Token(IDENTIFIER, "students"),
+    Token(WHERE, "WHERE"),
+    Token(IDENTIFIER, "age"),
+    Token(GREATER_THAN, ">"),
+    Token(NUMBER, 20)
+]
+```
+
+**Token Types Supported**:
+- Keywords: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, FROM, WHERE, VALUES, etc.
+- Identifiers: table names, column names
+- Literals: strings ('text'), numbers (123, 45.67)
+- Operators: =, !=, <, >, <=, >=
+- Symbols: (, ), *, ,, ;
+- Logical: AND, OR
+
+#### Phase 2: Syntax Analysis (Parser)
+
+**File**: sql_compiler.py → Class: Parser
+
+**Purpose**: Validate syntax and build Abstract Syntax Tree (AST)
+
+**Process**:
+```
+Input: Token stream from Lexer
+
+Parsing:
+- Check token sequence follows SQL grammar
+- Build hierarchical tree structure
+- Validate query structure
+
+Output: AST Node
+Example: SelectNode(
+    columns = ['name'],
+    table = 'students',
+    where = WhereClause(column='age', operator='>', value=20)
+)
+```
+
+**Grammar Rules Implemented**:
+```
+CREATE  → CREATE TABLE identifier (column_list)
+INSERT  → INSERT INTO identifier [(column_list)] VALUES (value_list)
+SELECT  → SELECT column_list FROM identifier [WHERE condition]
+UPDATE  → UPDATE identifier SET assignment_list [WHERE condition]
+DELETE  → DELETE FROM identifier [WHERE condition]
+DROP    → DROP TABLE identifier
+
+column_list → identifier [, identifier]*
+value_list  → literal [, literal]*
+assignment  → identifier = literal
+condition   → comparison [logical_op comparison]*
+comparison  → identifier operator literal
+operator    → = | != | < | > | <= | >=
+logical_op  → AND | OR
+```
+
+#### Phase 3: Semantic Analysis
+
+**File**: sql_compiler.py → Throughout Parser and Executor
+
+**Purpose**: Validate semantic correctness
+
+**Checks**:
+- Table exists before querying
+- Column names are valid
+- Data types match (implicit)
+- Sufficient values in INSERT
+- Assignments reference valid columns
+
+#### Phase 4: Execution
+
+**File**: sql_compiler.py → Classes: QueryExecutor, Database
+
+**Purpose**: Execute the validated query
+
+**Components**:
+
+**Database Manager**:
+```python
+class Database:
+    - tables: Dictionary of table structures
+    - create_table(): Add new table
+    - insert_row(): Add data
+    - select_rows(): Query data with filtering
+    - update_rows(): Modify records
+    - delete_rows(): Remove records
+    - drop_table(): Delete table
+```
+
+**Query Executor**:
+```python
+class QueryExecutor:
+    - execute(): Route to appropriate handler
+    - _execute_create(): Process CREATE TABLE
+    - _execute_insert(): Process INSERT
+    - _execute_select(): Process SELECT
+    - _execute_update(): Process UPDATE
+    - _execute_delete(): Process DELETE
+    - _execute_drop(): Process DROP TABLE
+```
+
+### Data Structures
+
+#### Table Structure
+```python
+{
+    'table_name': {
+        'columns': [
+            ('column1', 'INT'),
+            ('column2', 'VARCHAR(50)'),
+            ('column3', 'FLOAT')
+        ],
+        'rows': [
+            {'column1': 1, 'column2': 'value', 'column3': 3.14},
+            {'column1': 2, 'column2': 'value2', 'column3': 2.71},
+            ...
+        ]
+    }
+}
+```
+
+#### AST Node Types
+```python
+CreateTableNode(table_name, columns)
+InsertNode(table_name, columns, values)
+SelectNode(columns, table_name, where_clause)
+UpdateNode(table_name, assignments, where_clause)
+DeleteNode(table_name, where_clause)
+DropTableNode(table_name)
+WhereClause(column, operator, value, logical_op, next_condition)
+```
+
+### Execution Flow
+
+```
+User Input (GUI)
+    ↓
+SQLCompiler.compile_and_execute()
+    ↓
+Lexer.tokenize() → Token Stream
+    ↓
+Parser.parse() → AST
+    ↓
+QueryExecutor.execute() → Database Operations
+    ↓
+Result Dictionary
+    ↓
+GUI Display (Output Console + Results Table)
+```
+
+---
+
+## Appendix A: Complete Function Reference
+
+### Lexer Functions
+- `tokenize()` - Main tokenization method
+- `_read_string()` - Parse string literals
+- `_read_number()` - Parse numeric literals
+- `_read_identifier()` - Parse identifiers/keywords
+- `_read_operator()` - Parse comparison operators
+- `_skip_whitespace()` - Skip spaces/tabs/newlines
+- `_skip_comment()` - Skip SQL comments (--)
+
+### Parser Functions
+- `parse()` - Main parsing method
+- `_parse_create()` - Parse CREATE TABLE
+- `_parse_insert()` - Parse INSERT INTO
+- `_parse_select()` - Parse SELECT
+- `_parse_update()` - Parse UPDATE
+- `_parse_delete()` - Parse DELETE
+- `_parse_drop()` - Parse DROP TABLE
+- `_parse_where()` - Parse WHERE clause
+- `_expect()` - Expect specific token type
+
+### Database Functions
+- `create_table()` - Create new table
+- `insert_row()` - Add row to table
+- `select_rows()` - Query rows
+- `update_rows()` - Modify rows
+- `delete_rows()` - Remove rows
+- `drop_table()` - Delete table
+- `_evaluate_where()` - Evaluate WHERE conditions
+
+---
+
+## Appendix B: Keyboard Shortcuts
+
+In Query Editor:
+- Ctrl+A - Select all
+- Ctrl+C - Copy
+- Ctrl+V - Paste
+- Ctrl+X - Cut
+- Ctrl+Z - Undo
+
+---
+
+## Appendix C: Supported vs Not Supported Features
+
+### ✅ Supported
+- CREATE TABLE with INT, VARCHAR, FLOAT, DATE
+- INSERT with all or specific columns
+- SELECT with * or column list
+- SELECT with WHERE clause
+- WHERE with =, !=, <, >, <=, >=
+- WHERE with AND/OR (multiple conditions)
+- UPDATE with single or multiple columns
+- UPDATE with WHERE clause
+- DELETE with WHERE clause
+- DROP TABLE
+
+### ❌ Not Supported (Possible Extensions)
+- JOIN operations
+- Subqueries
+- Aggregate functions (COUNT, SUM, AVG, etc.)
+- GROUP BY clause
+- ORDER BY clause
+- LIMIT clause
+- ALTER TABLE
+- CREATE INDEX
+- Transactions (BEGIN, COMMIT, ROLLBACK)
+- Constraints (PRIMARY KEY, FOREIGN KEY, UNIQUE, NOT NULL)
+- DEFAULT values
+- AUTO_INCREMENT
+- Multiple tables in FROM clause
+
+---
+
+**End of User Guide**
+
+For technical support or questions about compiler implementation, refer to the source code comments in sql_compiler.py
+
+Good luck with your Compiler Design project! 🎓
